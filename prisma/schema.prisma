@@ -26,7 +26,7 @@ model category {
 
 model post {
   id          Int      @id @default(autoincrement())
-  date        DateTime @default(now()) @db.Date
+  date        DateTime @default(now())
   title       String   @db.VarChar(255)
   description String?
   category    category @relation(fields: [categoryId], references: [id])

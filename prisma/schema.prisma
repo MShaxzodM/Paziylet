@@ -33,12 +33,14 @@ model post {
   categoryId  Int
   views       Int
   images      String[]
-  tags Tag[]
+  tags        Tag[]
 }
 
 model Tag {
-  id   Int    @id @default(autoincrement())
-  name String
+  id     Int    @id @default(autoincrement())
+  name   String
+  post   post?  @relation(fields: [postId], references: [id])
+  postId Int?
 }
 
 model QA {

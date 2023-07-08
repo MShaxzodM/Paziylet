@@ -45,7 +45,7 @@ router.post("/", Auth, upload.array("images"), async (req, res) => {
     try {
         req.body.images = [];
         req.body.categoryId = parseInt(req.body.categoryId);
-        req.body.date = new Date(req.body.date);
+        // req.body.date = new Date(req.body.date);
         const files: any = req.files;
         files.forEach((image: any) => {
             req.body.images.push(image.key);

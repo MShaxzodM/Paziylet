@@ -2,3 +2,9 @@
 node_modules/
 package-lock.json
 prisma/migrations/
+
+DATABASE_URL="postgresql://postgres:new_password@localhost:5432/paziylet"
+PORT=3002
+ACCESS_KEY_ID=AKIAZHDDHTPPQNX7UJV7
+SECRET_KEY=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
+TOKEN_KEY=tARA&Ijnk*

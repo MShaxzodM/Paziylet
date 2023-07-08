@@ -5,12 +5,16 @@ import bodyParser from "body-parser";
 import category from "./routes/category";
 import post from "./routes/post";
 import { Auth } from "./auth";
+import qa from "./routes/qa";
+import tag from "./routes/tags";
 const app = express();
 app.use(bodyParser.json());
 
 //local routes below:
 app.use("/category", category);
 app.use("/posts", post);
+app.use("/qa", qa);
+app.use("/tags", tag);
 app.post("/login", Auth, async (req, res) => {
     res.send("Logged in ");
 });

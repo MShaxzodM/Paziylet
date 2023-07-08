@@ -26,10 +26,26 @@ model category {
 
 model post {
   id          Int      @id @default(autoincrement())
-  date        DateTime @default(now())
+  date        DateTime @default(now()) @db.Date
   title       String   @db.VarChar(255)
   description String?
   category    category @relation(fields: [categoryId], references: [id])
   categoryId  Int
+  views       Int
   images      String[]
+  tag Tag @relation(fields:[tagId],references:[id])
+  tagId Int[]
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model QA {
+  id       Int     @id @default(autoincrement())
+  question String
+  name     String  @default("Demo")
+  answer   String  @default("Javob berilmagan")
+  status   Boolean @default(false)
 }

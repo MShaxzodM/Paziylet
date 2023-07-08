@@ -76,7 +76,7 @@ router.get("/", async (req, res) => {
         take: limit,
         skip: offset,
     });
-    const updatedData = await Promise.all(
+    const Posts = await Promise.all(
         posts.map(async (post: any) => {
             const images = await Promise.all(
                 post.images.map((image: any) => {
@@ -91,10 +91,32 @@ router.get("/", async (req, res) => {
             return post;
         })
     );
-
-    res.send(updatedData);
+    const count = prisma.post.count();
+    res.send({ count, Posts });
 });
+router.get("/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const post: any = await prisma.post.findUnique({
+        where: {
+            id: id,
+        },
+    });
 
+    const images = await Promise.all(
+        post.images.map((image: any) => {
+            return getObjectSignedUrl(image);
+        })
+    );
+    const categoryName: any = await prisma.category.findUnique({
+        where: { id: post.categoryId },
+    });
+    post.categoryName = categoryName.name;
+    post.images = images;
+    const views = parseInt(post.views + 1);
+    await prisma.post.update({ data: { views: views }, where: { id } });
+
+    res.send(post);
+});
 // Update post:
 
 router.put("/:id", Auth, async (req, res) => {

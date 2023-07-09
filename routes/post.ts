@@ -40,16 +40,18 @@ const upload = multer({
     }),
 });
 
-// Then there is actually post method!
-router.post("/", Auth, upload.array("images"), async (req, res) => {
+router.post("/", upload.array("images"), async (req, res) => {
     try {
+        console.log(req.files);
         req.body.images = [];
         req.body.categoryId = parseInt(req.body.categoryId);
-        // req.body.date = new Date(req.body.date);
+
+        req.body.date = new Date(req.body.date);
         const files: any = req.files;
         files.forEach((image: any) => {
             req.body.images.push(image.key);
         });
+        console.log(req.body);
         const post = await prisma.post.create({
             data: req.body,
         });
@@ -86,12 +88,13 @@ router.get("/", async (req, res) => {
             const categoryName: any = await prisma.category.findUnique({
                 where: { id: post.categoryId },
             });
+            post.date = new Date(post.date).toISOString().split("T")[0];
             post.categoryName = categoryName.name;
             post.images = images;
             return post;
         })
     );
-    const count = prisma.post.count();
+    const count = await prisma.post.count();
     res.send({ count, Posts });
 });
 router.get("/:id", async (req, res) => {
@@ -110,6 +113,7 @@ router.get("/:id", async (req, res) => {
     const categoryName: any = await prisma.category.findUnique({
         where: { id: post.categoryId },
     });
+    post.date = new Date(post.date).toISOString().split("T")[0];
     post.categoryName = categoryName.name;
     post.images = images;
     const views = parseInt(post.views + 1);
@@ -119,7 +123,7 @@ router.get("/:id", async (req, res) => {
 });
 // Update post:
 
-router.put("/:id", Auth, async (req, res) => {
+router.put("/:id", async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const update = await prisma.post.update({
@@ -133,7 +137,7 @@ router.put("/:id", Auth, async (req, res) => {
 });
 
 // deleting post
-router.delete("/:id", Auth, async (req, res) => {
+router.delete("/:id", async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const beDeleted: any = await prisma.post.findUnique({ where: { id } });

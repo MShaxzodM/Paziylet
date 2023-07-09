@@ -22,7 +22,7 @@ async function get_category() {
 
 // code below is posting to category table
 
-router.post("/", Auth, async (req, res) => {
+router.post("/", async (req, res) => {
     try {
         const category = await prisma.category.create({ data: req.body });
         res.send(category);
@@ -32,7 +32,7 @@ router.post("/", Auth, async (req, res) => {
 });
 
 // updating category names:
-router.put("/:id", Auth, async (req, res) => {
+router.put("/:id", async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const update = await prisma.category.update({
@@ -46,7 +46,7 @@ router.put("/:id", Auth, async (req, res) => {
 });
 
 // deleting category by id
-router.delete("/:id", Auth, async (req, res) => {
+router.delete("/:id", async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const deleted = await prisma.category.delete({

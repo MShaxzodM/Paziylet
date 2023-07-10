@@ -7,6 +7,7 @@ import post from "./routes/post";
 import { Auth } from "./auth";
 import qa from "./routes/qa";
 import tag from "./routes/tags";
+import Hadis from "./routes/hadis";
 const app = express();
 app.use(bodyParser.json());
 
@@ -15,6 +16,7 @@ app.use("/category", category);
 app.use("/posts", post);
 app.use("/qa", qa);
 app.use("/tags", tag);
+app.use("/kunhadisi", Hadis);
 app.post("/login", Auth, async (req, res) => {
     res.send("Logged in ");
 });

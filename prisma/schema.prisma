@@ -48,3 +48,11 @@ model QA {
   answer   String  @default("Javob berilmagan")
   status   Boolean @default(false)
 }
+
+model Hadis {
+  id          Int      @id @default(autoincrement())
+  title       String
+  author      String   @default("Demo")
+  description String
+  date        DateTime @default(now()) @db.Date
+}

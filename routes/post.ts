@@ -42,8 +42,9 @@ const upload = multer({
 
 router.post("/", upload.array("images"), async (req, res) => {
     try {
-        console.log(req.files);
         req.body.images = [];
+        const tags = req.body.tags.split(",");
+        req.body.tags = tags.map((tag: any) => parseInt(tag));
         req.body.categoryId = parseInt(req.body.categoryId);
 
         req.body.date = new Date(req.body.date);
@@ -85,12 +86,26 @@ router.get("/", async (req, res) => {
                     return getObjectSignedUrl(image);
                 })
             );
+            const tags = await Promise.all(
+                post.tags.map(async (tag: any) => {
+                    const newtag: any = await prisma.tag.findUnique({
+                        select: {
+                            name: true,
+                        },
+                        where: {
+                            id: tag,
+                        },
+                    });
+                    return newtag.name;
+                })
+            );
             const categoryName: any = await prisma.category.findUnique({
                 where: { id: post.categoryId },
             });
             post.date = new Date(post.date).toISOString().split("T")[0];
             post.categoryName = categoryName.name;
             post.images = images;
+            post.tags = tags;
             return post;
         })
     );

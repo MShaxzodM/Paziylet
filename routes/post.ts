@@ -39,7 +39,7 @@ const upload = multer({
         },
     }),
 });
-
+// post posts
 router.post("/", upload.array("images"), async (req, res) => {
     try {
         req.body.images = [];
@@ -69,12 +69,17 @@ router.get("/", async (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 7;
     const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
     const search = req.query.search ? req.query.search : "";
+    const not = req.query.categoryId ? 1 : 0;
+    const catid = req.query.categoryId
+        ? parseInt(req.query.categoryId as string)
+        : 0;
     const posts: any = await prisma.post.findMany({
         where: {
             title: {
                 contains: search as string,
                 mode: "insensitive",
             },
+            OR: [{ categoryId: catid }, { categoryId: { not: not } }],
         },
         take: limit,
         skip: offset,

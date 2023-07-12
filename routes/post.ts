@@ -69,7 +69,6 @@ router.get("/", async (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit as string) : 7;
     const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
     const search = req.query.search ? req.query.search : "";
-    const not = req.query.categoryId ? 1 : 0;
     const catid = req.query.categoryId
         ? parseInt(req.query.categoryId as string)
         : 0;
@@ -79,7 +78,7 @@ router.get("/", async (req, res) => {
                 contains: search as string,
                 mode: "insensitive",
             },
-            OR: [{ categoryId: catid }, { categoryId: { not: not } }],
+            ...(catid ? { categoryId: catid } : {}),
         },
         take: limit,
         skip: offset,

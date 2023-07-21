@@ -21,4 +21,25 @@ router.get("/", async (req, res) => {
         res.send(err);
     }
 });
+router.patch("/", async (req, res) => {
+    try {
+        const id = parseInt(req.body.id);
+        const updated = await prisma.tag.update({
+            data: req.body,
+            where: { id: id },
+        });
+        res.send(updated);
+    } catch (err) {
+        res.send(err);
+    }
+});
+router.delete("/", async (req, res) => {
+    try {
+        const id = parseInt(req.body.id);
+        const deleted = await prisma.tag.delete({ where: { id: id } });
+        res.send(deleted);
+    } catch (err) {
+        res.send(err);
+    }
+});
 export default router;

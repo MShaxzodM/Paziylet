@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const answer = await prisma.qA.update({
@@ -57,4 +57,15 @@ router.put("/:id", async (req, res) => {
         res.send(err);
     }
 });
+
+router.delete("/", async (req, res) => {
+    try {
+        const id = parseInt(req.body.id);
+        const deleted = await prisma.qA.delete({ where: { id: id } });
+        res.send(deleted);
+    } catch (err) {
+        res.send(err);
+    }
+});
+
 export default router;

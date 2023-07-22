@@ -113,7 +113,15 @@ router.get("/", async (req, res) => {
             return post;
         })
     );
-    const count = await prisma.post.count();
+    const count = await prisma.post.count({
+        where: {
+            title: {
+                contains: search as string,
+                mode: "insensitive",
+            },
+            ...(catid ? { categoryId: catid } : {}),
+        },
+    });
     res.send({ count, Posts });
 });
 router.get("/:id", async (req, res) => {

@@ -27,8 +27,10 @@ model category {
 model post {
   id          Int      @id @default(autoincrement())
   date        DateTime @default(now()) @db.Date
-  title       String   @db.VarChar(255)
-  description String?
+  title_uz      String   @db.VarChar(255)
+  title_kr      String   @db.VarChar(255)
+  description_uz String?
+  description_kr String?
   category    category @relation(fields: [categoryId], references: [id])
   categoryId  Int
   views       Int      @default(0)
@@ -52,7 +54,9 @@ model QA {
 model Hadis {
   id          Int      @id @default(autoincrement())
   title       String
+  title_kr    String
   author      String   @default("Demo")
-  description String
+  description_uz String
+  description_kr String
   date        DateTime @default(now()) @db.Date
 }

@@ -74,14 +74,19 @@ router.get("/", async (req, res) => {
         : 0;
     const posts: any = await prisma.post.findMany({
         where: {
-            OR:[
-               title_uz: {
-                contains: search as string,
-                mode: "insensitive",
-            },title_kr:{
-                contains: search as string,
-                mode: "insensitive",
-            }
+            OR: [
+                {
+                    title_uz: {
+                        contains: search as string,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    title_kr: {
+                        contains: search as string,
+                        mode: "insensitive",
+                    },
+                },
             ],
             ...(catid ? { categoryId: catid } : {}),
         },
@@ -120,10 +125,20 @@ router.get("/", async (req, res) => {
     );
     const count = await prisma.post.count({
         where: {
-            title: {
-                contains: search as string,
-                mode: "insensitive",
-            },
+            OR: [
+                {
+                    title_uz: {
+                        contains: search as string,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    title_kr: {
+                        contains: search as string,
+                        mode: "insensitive",
+                    },
+                },
+            ],
             ...(catid ? { categoryId: catid } : {}),
         },
     });

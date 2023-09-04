@@ -74,10 +74,15 @@ router.get("/", async (req, res) => {
         : 0;
     const posts: any = await prisma.post.findMany({
         where: {
-            title: {
+            OR:[
+               title_uz: {
                 contains: search as string,
                 mode: "insensitive",
-            },
+            },title_kr:{
+                contains: search as string,
+                mode: "insensitive",
+            }
+            ],
             ...(catid ? { categoryId: catid } : {}),
         },
         take: limit,
